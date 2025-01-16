@@ -1,12 +1,21 @@
+<!--When you go to http://localhost:3000/index.html, this is the file opened in html by the browser-->
+<!--Locally, webpack or vite injects the bundle.js so that is why you dont see something trying to kick this process off.-->
+<!--webpage or vite is injects:  <script src="/static/js/bundle.js"></script>-->
+<!--But in Production, you need to uncomment this because webpack/vite are only used as dev environments-->
+<!--bundle.js initiates src>index.js -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>React App</title>
+    <!--Title to display name on browser tab-->
+    <title>React App</title> 
   </head>
   <body>
+    <!--Displayed if JavaScript is disabled in the browser.  JS is required to run this app-->
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!--The root div where React will anchor & call index.js-->
     <div id="root"></div>
+    <!--<script src="/static/js/bundle.js"></script>-->
   </body>
 </html>
