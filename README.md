@@ -1,8 +1,7 @@
-basic-app
-Skeleton app
+Downloading this repo will setup a basic environment.  To install dependencies:
 
-How to setup:
-Install webpack:
+Install webpack for dependency mgmt and loaders(babel):
+1. npm install --save-dev webpack webpack-cli
 
-npm install --save-dev webpack webpack-cli Install dependencies in package.json:
-npm install
+Install dependencies in package.json:
+2. npm install
