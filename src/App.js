@@ -1,101 +1,94 @@
-// Initial Setup for a React App
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState } from "react";
+import { handleAddItem, handleDeleteItem } from "./utils/listUtils";
 
-//function declaration -- This defines the app component into the DOM.  Under the return is what Displays on the page.
 function App() {
-  //empty arrays and a useState started null
-  const [projects, setProjects] = useState([]);
-  const [tasks, setTasks] = useState([]);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [count, setCount] = useState(0);
+  const [showText, setShowText] = useState(true);
+  const [items, setItems] = useState([]);
+  const [inputValue, setInputValue] = useState("");
 
-  //This shit below is all fucked up so lets fix it first and then finish comments
-  const addProject = (event_object_users_input) => {
-    const newProject = { id: Date.now(), event_object_users_input, tasks: [] };
-    setProjects([...projects, newProject]);
+  const handleClick = () => {
+    setCount(count + 1);
   };
 
-  const addTask = (projectId, taskName) => {
-    const updatedProjects = projects.map((project) => {
-      if (project.id === projectId) {
-        const newTask = { id: Date.now(), event_object_users_input: taskName, completed: false };
-        return { ...project, tasks: [...project.tasks, newTask] };
-      }
-      return project;
-    });
-    setProjects(updatedProjects);
+  const toggleText = () => {
+    setShowText(!showText);
   };
 
-  const toggleTaskCompletion = (projectId, taskId) => {
-    const updatedProjects = projects.map((project) => {
-      if (project.id === projectId) {
-        const updatedTasks = project.tasks.map((task) => {
-          if (task.id === taskId) {
-            return { ...task, completed: !task.completed };
-          }
-          return task;
-        });
-        return { ...project, tasks: updatedTasks };
-      }
-      return project;
-    });
-    setProjects(updatedProjects);
+  const addItem = () => {
+    const updatedItems = handleAddItem(items, inputValue);
+    setItems(updatedItems);
+    setInputValue(""); // Clear input field
+  };
+
+  const deleteItem = (indexToDelete) => {
+    const updatedItems = handleDeleteItem(items, indexToDelete);
+    setItems(updatedItems);
   };
 
   return (
-    <div className="App">
-      <header>
-        <h1>Asana Clone</h1>
-      </header>
+    <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold mb-6 text-center">
+        Welcome to My React App
+      </h1>
+      <p className="text-lg mb-4">
+        This app demonstrates state management, conditional rendering, mapping, and item deletion.
+      </p>
 
-      <main>
-        <section className="project-section">
-          <h2>Projects</h2>
-          <ul>
-            {projects.map((project) => (
-              <li key={project.id} onClick={() => setSelectedProject(project)}>
-                {project.event_object_users_input}
-              </li>
-            ))}
-          </ul>
-          <input
-            type="text"
-            placeholder="New Project Name"
-            onKeyDown={(event_object_users_input) => {
-              if (event_object_users_input.key === 'Enter') addProject(event_object_users_input.target.value);
-            }}
-          />
-        </section>
+      {/* Counter Functionality */}
+      <button
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition mb-4"
+        onClick={handleClick}
+      >
+        Click Me
+      </button>
+      <p className="text-xl mb-8">You clicked the button {count} times.</p>
 
-        <section className="task-section">
-          {selectedProject ? (
-            <>
-              <h2>Tasks for {selectedProject.name}</h2>
-              <ul>
-                {selectedProject.tasks.map((task) => (
-                  <li key={task.id}>
-                    <input
-                      type="checkbox"
-                      checked={task.completed}
-                      onChange={() => toggleTaskCompletion(selectedProject.id, task.id)}
-                    />
-                    {task.event_object_users_input}
-                  </li>
-                ))}
-              </ul>
-              <input
-                type="text"
-                placeholder="New Task Name"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') addTask(selectedProject.id, e.target.value);
-                }}
-              />
-            </>
-          ) : (
-            <p>Select a project to see tasks</p>
-          )}
-        </section>
-      </main>
+      {/* Toggle Text Functionality */}
+      <button
+        className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition mb-4"
+        onClick={toggleText}
+      >
+        Toggle Message
+      </button>
+      {showText && (
+        <p className="text-lg text-gray-700 mb-8">
+          Hello! This is a message you can toggle on and off.
+        </p>
+      )}
+
+      {/* Input and List Mapping */}
+      <div className="w-full max-w-md">
+        <input
+          type="text"
+          className="border border-gray-300 rounded w-full py-2 px-4 mb-4 focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Enter an item..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button
+          className="bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-700 transition w-full"
+          onClick={addItem}
+        >
+          Add Item
+        </button>
+        <ul className="mt-4 space-y-2">
+          {items.map((item, index) => (
+            <li
+              key={index}
+              className="flex justify-between items-center bg-white p-2 rounded shadow"
+            >
+              <span className="text-gray-700">{item}</span>
+              <button
+                className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700 transition"
+                onClick={() => deleteItem(index)}
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
